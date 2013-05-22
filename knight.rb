@@ -15,7 +15,7 @@ class Knight < SteppingPiece
 
   def initialize(color, location)
     super(color, location)
-    @image = :H
+    @image = "\u2658"
   end
 
   # Why does Knight class fail to inherit directions and possible_moves methods?

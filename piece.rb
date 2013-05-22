@@ -13,9 +13,6 @@ class Piece
     move_in_board?(move) && !occupied_by_ally?(move, game_board)
   end
 
-  def move_patterns # to be defined in each individual class
-  end
-
   def directions
     return MOVES
   end
@@ -41,13 +38,13 @@ class Piece
     !game_board.board[x][y].nil?
   end
 
-  def captured
-    # method to identify a piece is captured and take it off board
-  end
-
-  def capture_enemy
-    # method defines the capturing of a piece?
-  end
+  # def captured
+  #   # method to identify a piece is captured and take it off board
+  # end
+  #
+  # def capture_enemy
+  #   # method defines the capturing of a piece?
+  # end
 
   protected
 

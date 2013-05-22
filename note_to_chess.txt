@@ -1,0 +1,14 @@
+1. Fix Knight move
+
+2. Fix Pawn move when it attempts to eat another piece
+
+3. Probably review all the pieces again because there will be bugs
+
+4. Fix the part where King and Knight classes could not inherit methods from SteppingPiece class
+
+5. Check mate logic
+
+
+MAKE IT LOOK PRETTIER!
+
+http://en.wikipedia.org/wiki/Chess_symbols_in_Unicode (symbols for code)

@@ -17,7 +17,7 @@ class Queen < Piece
 
   def initialize(color, location)
     super(color, location)
-    @image = :Q
+    @image = "\u2655"
     #initialize the piece with color, location
   end
 

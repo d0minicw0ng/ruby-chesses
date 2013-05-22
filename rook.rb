@@ -11,7 +11,7 @@ class Rook < Piece
 
   def initialize(color, location)
     super(color, location)
-    @image = :R
+    @image = "\u2659"
   end
 
   def directions

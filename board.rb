@@ -45,19 +45,31 @@ class Board
   end
 
   def render # print_board
-    puts "0 1 2 3 4 5 6 7"
+    puts "0  1  2  3  4  5  6  7"
 
-    @board.each_with_index do |row, index|
+    @board.each_with_index do |row, row_index|
       puts "\n"
-      row.each do |pi|
+      row.each_with_index do |pi, col_index|
         if !pi.nil?
           if pi.color == :red
-            print "#{pi.image} ".red
+            if col_index < 7
+              print "#{pi.image} ".red + "|"
+            else
+              print "#{pi.image} ".red + "| #{row_index}"
+            end
           else
-            print "#{pi.image} ".white
+            if col_index < 7
+              print "#{pi.image} ".white + "|"
+            else
+              print "#{pi.image} ".white + "| #{row_index}"
+            end
           end
         else
-          print "_ "
+          if col_index < 7
+            print "_ |"
+          else
+            print "_ | #{row_index}"
+          end
         end
       end
       puts "\n"

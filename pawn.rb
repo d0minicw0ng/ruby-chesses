@@ -7,7 +7,7 @@ class Pawn < Piece
 
   def initialize(color, location)
     super(color,location)
-    @image = :P
+    @image = "\u2659"
     #initialize the piece with color, location
   end
 

@@ -15,7 +15,7 @@ class King < SteppingPiece
 
   def initialize(color, location)
     super(color, location)
-    @image = :K
+    @image = "\u2654"
   end
 
   # Why does King class fail to inherit directions and possible_moves methods?

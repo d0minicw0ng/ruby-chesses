@@ -11,7 +11,7 @@ class Bishop < SlidingPiece
 
   def initialize(color, location)
     super(color, location)
-    @image = :B
+    @image = "\u2657"
   end
 
   def directions
