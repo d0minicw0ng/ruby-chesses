@@ -149,23 +149,23 @@ class Board
     end
   end
 
-  def winner_is # only execute if someone_won? == true
-    @grid.each do |row|
-      row.each do |pos|
-        return pos.color if pos.is_a?(King)
-      end
-    end
-  end
-
-  def someone_won?
-    king_count = 0
-    @grid.each do |row|
-      row.each do |position|
-        king_count += 1 if position.is_a?(King)
-      end
-    end
-    king_count == 1 ? true : false
-  end
+  # def winner_is # only execute if someone_won? == true
+#     @grid.each do |row|
+#       row.each do |pos|
+#         return pos.color if pos.is_a?(King)
+#       end
+#     end
+#   end
+#
+#   def someone_won?
+#     king_count = 0
+#     @grid.each do |row|
+#       row.each do |position|
+#         king_count += 1 if position.is_a?(King)
+#       end
+#     end
+#     king_count == 1 ? true : false
+#   end
 
   def valid_move?(move, piece)
     move_in_board?(move) && !occupied_by_ally?(move, piece)
