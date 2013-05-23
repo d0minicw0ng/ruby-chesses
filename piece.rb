@@ -27,6 +27,7 @@ class Piece
   end
 end
 
+# REV: It's weird to have your requires down here.
 require_relative 'board'
 require_relative 'king'
 require_relative 'knight'

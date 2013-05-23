@@ -19,6 +19,7 @@ class SlidingPiece < Piece
 
       if game_board.occupied?(loc)
         growth << loc
+        # REV This comment is out of place?
         return growth # this break breaks out of which loop?
       else
         growth << loc

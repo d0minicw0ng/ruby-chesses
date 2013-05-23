@@ -2,6 +2,9 @@ require_relative 'piece'
 
 class SteppingPiece < Piece
 
+  # REV: Is there a reason to initialize this empty array here?
+  # It seems like you could just raise a NotImplementedError 
+  # in directions instead.
   MOVES = []
 
   def directions
