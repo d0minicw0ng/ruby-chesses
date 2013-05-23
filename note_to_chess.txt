@@ -1,8 +1,0 @@
-3. Probably review all the pieces again because there will be bugs
-
-4. Fix the part where King and Knight classes could not inherit methods from SteppingPiece class
-
-5. Check mate logic
-
-
-MAKE IT LOOK PRETTIER!
