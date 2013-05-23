@@ -18,7 +18,6 @@ class Knight < SteppingPiece
     @image = "\u2658"
   end
 
-  # Why does Knight class fail to inherit directions and possible_moves methods?
   def directions
     return MOVES
   end

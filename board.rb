@@ -1,8 +1,6 @@
 require_relative 'piece'
 require_relative 'player'
-#require 'debugger'
-
-require 'colored' # gem, has to be 'required'
+require 'colored'
 
 class Board
 
@@ -21,7 +19,7 @@ class Board
     populate_blank_spaces
   end
 
-  def populate_front_rows(color, row) # row 1 or row 6, black or white
+  def populate_front_rows(color, row)
     @grid.length.times { |idx| @grid[row] << Pawn.new(color, [row, idx])}
   end
 
@@ -34,7 +32,7 @@ class Board
     end
   end
 
-  def populate_back_rows(color, row) # row 0 or row 7, black or white
+  def populate_back_rows(color, row)
     @grid[row] << Rook.new(color, [row, 0])
     @grid[row] << Knight.new(color, [row, 1])
     @grid[row] << Bishop.new(color, [row, 2])
@@ -124,7 +122,6 @@ class Board
     false
   end
 
-  # checking if the current location of the King is in check
   def king_in_check?(our_king_color)
     @grid.each_with_index do |row, row_idx|
       row.each_index do |col_idx|
@@ -138,7 +135,6 @@ class Board
     false
   end
 
-  # finds the location of the king with color_tgt, so if passed white, will find white King
   def find_king_loc(color_tgt)
     @grid.each do |row|
       row.each do |pos|
@@ -148,24 +144,6 @@ class Board
       end
     end
   end
-
-  # def winner_is # only execute if someone_won? == true
-#     @grid.each do |row|
-#       row.each do |pos|
-#         return pos.color if pos.is_a?(King)
-#       end
-#     end
-#   end
-#
-#   def someone_won?
-#     king_count = 0
-#     @grid.each do |row|
-#       row.each do |position|
-#         king_count += 1 if position.is_a?(King)
-#       end
-#     end
-#     king_count == 1 ? true : false
-#   end
 
   def valid_move?(move, piece)
     move_in_board?(move) && !occupied_by_ally?(move, piece)
@@ -187,5 +165,4 @@ class Board
     x, y = move[0], move[1]
     !@grid[x][y].nil?
   end
-
 end
