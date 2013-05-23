@@ -1,6 +1,7 @@
 require 'colored'
 require_relative 'piece'
 require_relative 'user'
+require 'debugger'
 
 class Board
   attr_accessor :grid
@@ -11,7 +12,7 @@ class Board
   end
 
   def render
-    print "01234567\n"
+    print "abcdefgh\n"
     @grid.each_with_index do |row, row_index|
       row.each_with_index do |piece, col_index|
         print_empty_tiles(row_index, col_index) if piece.nil?
@@ -62,9 +63,10 @@ class Board
     board_copy = Board.new(false)
     board_copy.grid.each_with_index do |row, row_index|
       row.each_with_index do |piece, col_index|
-        piece = self.grid[row_index][col_index].dup
+        piece = self.grid[row_index][col_index].dup unless self.grid[row_index][col_index].nil?
       end
     end
+    board_copy
   end
 
   def game_over?(color)
@@ -72,14 +74,20 @@ class Board
   end
 
   def one_side_wiped_out?(color)
-    @grid.none? { |row| row.none? { |piece| piece.color == color } }
+    @grid.each do |row|
+      row.each do |piece|
+        next if piece.nil?
+        return false if piece.color == color
+      end
+    end
+    true
   end
 
   def no_more_moves?(color)
     @grid.each do |row|
       row.each do |piece|
-        next if piece.color != color
-        return false if piece.has_moves?
+        next if piece.nil? || piece.color != color
+        return false if piece.has_moves?(self)
       end
     end
     true
