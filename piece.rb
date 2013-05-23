@@ -1,3 +1,6 @@
+require_relative 'board'
+require_relative 'user'
+
 class Piece
   attr_reader :color, :symbol
   attr_accessor :is_king
@@ -6,11 +9,13 @@ class Piece
   def initialize(color)
     @color = color
     @is_king = false
-    # @symbol = (color == :red) ? "\u26c0" : "\u26c2"
+    @symbol = (color == :red) ? "\u25cf" : "\u25cf"
+    # black chess king symbol's unicode is "\u265a", to be changed when @is_king == true
   end
 
   def render
-    self.color == :red ? "R" : "B"
+    # self.color == :red ? "R" : "B"
+    self.symbol
   end
 
   def slide_moves

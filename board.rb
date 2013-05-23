@@ -1,10 +1,11 @@
 require 'colored'
 require_relative 'piece'
+require_relative 'user'
 
 class Board
 
   def initialize
-    @grid = Array.new(8) { Array.new(8) }
+    @grid = Board.create_grid
     fill_board
   end
 
@@ -19,11 +20,11 @@ class Board
     end.join("\n")
   end
 
-  # def self.create_grid
-  #   @grid = Array.new(8) { Array.new(8) }
-  # end
-
   private
+
+  def self.create_grid
+    @grid = Array.new(8) { Array.new(8) }
+  end
 
   def fill_board
     fill_odd_rows(:red)
@@ -51,8 +52,13 @@ class Board
   end
 
   def print_occupied_tiles(piece, row_index, col_index)
-    print piece.render.on_blue if col_index < 7
-    print piece.render.on_blue + "#{row_index}" if col_index == 7
+    if piece.color == :red
+      print piece.render.red_on_blue if col_index < 7
+      print piece.render.red_on_blue + "#{row_index}" if col_index == 7
+    else
+      print piece.render.black_on_blue if col_index < 7
+      print piece.render.black_on_blue + "#{row_index}" if col_index == 7
+    end
   end
 
   def print_empty_tiles(row_index, col_index)
