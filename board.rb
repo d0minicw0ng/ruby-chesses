@@ -167,9 +167,8 @@ class Board
     king_count == 1 ? true : false
   end
 
-
   def valid_move?(move, piece)
-    self.move_in_board?(move) && !self.occupied_by_ally?(move, piece)
+    move_in_board?(move) && !occupied_by_ally?(move, piece)
   end
 
   def move_in_board?(move)
@@ -185,7 +184,7 @@ class Board
   end
 
   def occupied?(move)
-    x,y = move[0], move[1]
+    x, y = move[0], move[1]
     !@grid[x][y].nil?
   end
 

@@ -10,11 +10,11 @@ class Piece
 
 
   def directions
-    raise NotImplmentedError
+    raise NotImplementedError
   end
 
   def possible_moves(game_board)
-    raise NotImplmentedError
+    raise NotImplementedError
   end
 
   # find the location of the white King, if passed white color_tgt
@@ -22,7 +22,7 @@ class Piece
   # true if the red piece can kill the white King
   def can_kill_king?(game_board, color_tgt)
     king_loc = game_board.find_king_loc(color_tgt)
-    possible_moves = self.possible_moves(game_board)
+    possible_moves = possible_moves(game_board)
     possible_moves.include?(king_loc)
   end
 
