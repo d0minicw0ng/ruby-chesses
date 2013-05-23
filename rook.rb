@@ -1,7 +1,7 @@
 require_relative 'piece'
 require_relative 'sliding_piece'
 
-class Rook < Piece
+class Rook < SlidingPiece
   attr_reader :image
 
   MOVES = [[1, 0],
@@ -11,7 +11,7 @@ class Rook < Piece
 
   def initialize(color, location)
     super(color, location)
-    @image = "\u2659"
+    @image = "\u2656"
   end
 
   def directions

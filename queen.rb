@@ -2,7 +2,7 @@ require_relative 'piece'
 require_relative 'sliding_piece'
 
 
-class Queen < Piece
+class Queen < SlidingPiece
   attr_reader :image
 
 

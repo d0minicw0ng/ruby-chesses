@@ -12,7 +12,7 @@ class Game
   end
 
   def turnover
-    @turn == @white_player ? @red_player : @white_player
+    @turn = (@turn == @white_player) ? @red_player : @white_player
   end
 
   def play
@@ -22,10 +22,19 @@ class Game
       @round += 1
       turnover
     end
-    @game_board.someone_won? ? "#{@game_board.winner_is.to_s} player won!" : "Drawn!"
+    @game_board.render
+    if @game_board.someone_won?
+      puts "#{@game_board.winner_is.to_s} player won!"
+    else
+      puts "Drawn!"
+    end
   end
 
   def drawn?
     @round == 500 ? true : false
   end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  Game.new
 end

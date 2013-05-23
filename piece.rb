@@ -1,57 +1,39 @@
 class Piece
-  # setups up super class to handle pieces
-  MOVES = []
 
-  attr_reader :color, :location
+  attr_reader :color
+  attr_accessor :location
 
   def initialize(color, location)
     @color = color
     @location = location
   end
 
-  def valid_move?(move, game_board)
-    move_in_board?(move) && !occupied_by_ally?(move, game_board)
-  end
 
   def directions
-    return MOVES
+    raise NotImplmentedError
   end
 
-  # def king_checked_move?
-  #   # method helps identify whether King is moving to a pos in which it will be checked
-  # end
-
-  def move_in_board?(move)
-    [move[0], move[1]].all? {|coord| coord.between?(0,7)}
+  def possible_moves(game_board)
+    raise NotImplmentedError
   end
 
-  def occupied_by_ally?(move, game_board)
-    if occupied?(move, game_board)
-      x,y = move[0], move[1]
-      return true if game_board.board[x][y].color == self.color
-    end
-    false
+  # find the location of the white King, if passed white color_tgt
+  # possible_moves are the possible moves of the red piece
+  # true if the red piece can kill the white King
+  def can_kill_king?(game_board, color_tgt)
+    king_loc = game_board.find_king_loc(color_tgt)
+    possible_moves = self.possible_moves(game_board)
+    possible_moves.include?(king_loc)
   end
 
-  def occupied?(move, game_board)
-    x,y = move[0], move[1]
-    !game_board.board[x][y].nil?
+  def dup
+    self.class.new(self.color, self.location)
   end
 
-  # def captured
-  #   # method to identify a piece is captured and take it off board
-  # end
-  #
-  # def capture_enemy
-  #   # method defines the capturing of a piece?
-  # end
-
-  protected
-
-  attr_accessor :location
 
 end
 
+require_relative 'board'
 require_relative 'king'
 require_relative 'knight'
 require_relative 'rook'
