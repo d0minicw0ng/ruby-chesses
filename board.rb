@@ -23,7 +23,9 @@ class Board
     @grid.length.times { |idx| @grid[row] << Pawn.new(color, [row, idx])}
   end
 
-
+  # REV: I think the default for an empty array is already nil.
+  # Plus you could do this same thing like this:
+  # Array.new(8) { Array.new { nil } }
   def populate_blank_spaces
     (2..5).each do |row_ind|
       (0..7).each do |col_ind|
@@ -44,11 +46,16 @@ class Board
   end
 
   def render # print_board
+    # REV: Maybe better(?): (0..7).to_a.join('  ')
     puts "0  1  2  3  4  5  6  7"
 
     @grid.each_with_index do |row, row_index|
       puts "\n"
       row.each_with_index do |pi, col_index|
+        # REV: This is a huge amount of logic to have here.
+        # You could just have the #image method return a colorized
+        # string already, since each player knows its color:
+        # "\u2659".send(@color)
         if !pi.nil?
           if pi.color == :red
             if col_index < 7
@@ -81,6 +88,8 @@ class Board
     new_x, new_y = new_move[0], new_move[1]
     piece = @grid[old_x][old_y]
     to_be_eaten = @grid[new_x][new_y]
+    # REV: Is there any reason to set this variable to nil
+    # before deleting the piece just a few lines away?
     to_be_eaten.location = nil unless to_be_eaten.nil?
 
     @grid[new_x][new_y] = piece
@@ -103,7 +112,7 @@ class Board
     board_copy = dup
     board_copy.grid.each do |row|
       row.each do |piece|
-        next if piece.nil?
+        next if piece.nil? # REV: || piece.color != color
         next if piece.color != color
 
         possible_moves = piece.possible_moves(board_copy)
@@ -118,6 +127,8 @@ class Board
   def next_move_in_check?(new_move, piece)
     board_copy = dup
     board_copy.move(piece.location, new_move)
+    # REV: You can just return board_copy.king_in_check?(piece.color)
+    # for the same effect.
     return true if board_copy.king_in_check?(piece.color)
     false
   end
@@ -128,7 +139,6 @@ class Board
         piece = @grid[row_idx][col_idx]
         next if piece.nil?
         next if piece.color == our_king_color
-
         return true if piece.can_kill_king?(self, our_king_color)
       end
     end

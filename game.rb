@@ -33,7 +33,8 @@ class Game
   def drawn?
     @round == 500 ? true : false
   end
-
+  # REV: This is sort of confusing. It's called perform_move,
+  # but it also has the loop to get a move.
   def perform_move(game_board, player)
     old_loc, new_move = nil, nil
     until !old_loc.nil? && !new_move.nil?
@@ -50,7 +51,10 @@ class Game
       puts "KING IN CHECK"
     end
   end
-
+  # REV: This name is kind of confusing too.
+  # Also it might be better to put this prompting info
+  # in the human player rather than here. Same for
+  # prompt for move. How would you add a computer player here?
   def piece_to_be_moved(game_board, player)
     puts "Which piece does #{@name} want to move? Please input the piece's coordinate. (like 5,5)"
     piece_to_be_moved = gets.chomp.split(",").map(&:to_i)
