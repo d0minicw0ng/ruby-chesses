@@ -65,7 +65,7 @@ class Piece
     if @is_king
       [[(@position[0] + (@forward_direction * 2)), (@position[1] + 2)],
        [(@position[0] + (@forward_direction * 2)), (@position[1] - 2)],
-       [(@position[0] - (@forward_direction * 2)), (@position[1] - 2)],
+       [(@position[0] - (@forward_direction * 2)), (@position[1] + 2)],
        [(@position[0] - (@forward_direction * 2)), (@position[1] - 2)]]
     else
       [[(@position[0] + (@forward_direction * 2)), (@position[1] + 2)],
@@ -127,7 +127,7 @@ class Piece
 
   def promote_to_king
     self.is_king = true
-    self.symbol = "\u265a"
+    self.symbol = "\u265f"
   end
 end
 
