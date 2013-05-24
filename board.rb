@@ -44,6 +44,8 @@ class Board
     @grid[to_x][to_y] = piece
     piece.position = move
     @grid[from_x][from_y] = nil
+
+    piece.promote_to_king if piece.reached_other_side?
   end
 
   def capture_piece(attack_move)

@@ -19,16 +19,18 @@ class Game
   def play(player1, player2)
     until @board.game_over?(@current_player.color)
       @board.render
-      # current player picks a piece
-      piece_coord = @current_player.pick_a_piece(@board)
-      piece = @board.tile_at(piece_coord)
-      # current player gives a move sequence
-      move_sequence = @current_player.get_move_sequence(piece, @board)
-      piece.perform_moves(move_sequence, @board)
-      # switch turn
+      begin
+        piece_coord = @current_player.pick_a_piece(@board)
+        piece = @board.tile_at(piece_coord)
+        move_sequence = @current_player.get_move_sequence(piece, @board)
+        piece.perform_moves(move_sequence, @board)
+      rescue InvalidMoveError
+        retry
+      end
+
       switch_turn
     end
-    puts "#{@current_player} LOST!"
+    puts "#{@current_player.color} player LOST!"
   end
 
   def switch_turn
