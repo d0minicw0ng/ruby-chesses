@@ -1,6 +1,7 @@
 require 'colored'
 require_relative 'piece'
 require_relative 'user'
+require_relative 'game'
 require 'debugger'
 
 class Board
@@ -34,16 +35,7 @@ class Board
   end
 
   def valid_jump_move?(piece, jump_move, attack_move)
-    valid_move?(jump_move) && !tile_at(attack_move).nil? && tile_at(attack_move).color != piece.color
-  end
-
-  def tile_in_board?(move_pos)
-    move_pos.all? {|coord| coord.between?(0,7)}
-  end
-
-  def tile_empty?(move_pos)
-    x, y = move_pos
-    tile_at(move_pos).nil?
+    valid_move?(jump_move) && (!tile_at(attack_move).nil? && tile_at(attack_move).color != piece.color)
   end
 
   def get_move(piece, move)
@@ -56,6 +48,8 @@ class Board
 
   def capture_piece(attack_move)
     x, y = attack_move
+    piece = @grid[x][y]
+    piece.position = nil
     @grid[x][y] = nil
   end
 
@@ -71,6 +65,16 @@ class Board
 
   def game_over?(color)
     one_side_wiped_out?(color) || no_more_moves?(color)
+  end
+
+  private
+
+  def tile_in_board?(move_pos)
+    move_pos.all? {|coord| coord.between?(0,7)}
+  end
+
+  def tile_empty?(move_pos)
+    tile_at(move_pos).nil?
   end
 
   def one_side_wiped_out?(color)
@@ -92,8 +96,6 @@ class Board
     end
     true
   end
-
-  private
 
   def self.create_grid
     @grid = Array.new(8) { Array.new(8) }
@@ -145,9 +147,4 @@ class Board
     print " ".on_blue + "#{row_index}" if (row_index.even? && col_index == 7)
     print " ".on_white + "#{row_index}" if (row_index.odd? && col_index == 7)
   end
-end
-
-if __FILE__ == $PROGRAM_NAME
-  b = Board.new
-  b.render
 end

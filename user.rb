@@ -1,5 +1,7 @@
 require_relative 'piece'
 require_relative 'board'
+require_relative 'game'
+require 'debugger'
 
 class User
   attr_reader :name, :color
@@ -12,24 +14,17 @@ class User
   def pick_a_piece(board)
     puts "#{@color} player, which piece do you want to move? Please input the piece's coordinate. (like b5)"
     piece = convert_piece_input(gets.chomp)
-    if board.tile_at(piece).nil? || board.tile_at(piece).color != @color
-      puts "Invalid Pick!"
-      return pick_a_piece(board)
-    end
+    raise InvalidMoveError if board.tile_at(piece).nil? || board.tile_at(piece).color != @color
     piece
   end
 
   def get_move_sequence(piece, board)
     puts "#{@color} player, please give me your desired move sequence. Please input the piece's coordinate in an array. (like c4,d3)"
-    move_sequence = convert_move_sequence(gets.chomp)
-    unless piece.valid_move_seq?(move_sequence, board)
-      puts "Invalid Pick!"
-      return pick_a_piece(board)
-    end
+    user_input = gets.chomp
+    move_sequence = convert_move_sequence(user_input)
+    raise InvalidMoveError unless piece.valid_move_seq?(move_sequence, board)
     move_sequence
   end
-
-  private
 
   def convert_piece_input(str) # c5
     row_index = str[1].to_i # 5
@@ -41,8 +36,9 @@ class User
   def convert_move_sequence(move_sequence) #d4,e3
     column = ("a".."h").to_a
     move_sequence_arr = []
+    to_be_converted = move_sequence.split(",")
 
-    move_sequence.split(",").each do |sequence| # [d4, c3]
+    to_be_converted.each do |sequence| # [d4, c3]
       row_index = sequence[1].to_i # 4
       col_index = column.index(sequence[0]) # 3
       move_sequence_arr << [row_index, col_index] # [4, 3]

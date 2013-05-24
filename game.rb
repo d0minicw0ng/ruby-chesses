@@ -31,8 +31,6 @@ class Game
     puts "#{@current_player} LOST!"
   end
 
-  private
-
   def switch_turn
     @current_player = (@current_player == @black_player) ? @red_player : @black_player
   end

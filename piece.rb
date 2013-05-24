@@ -1,10 +1,12 @@
 require_relative 'board'
 require_relative 'user'
+require_relative 'game'
+
 require 'debugger'
 
 class Piece
-  attr_reader :color, :symbol
-  attr_accessor :is_king, :position
+  attr_reader :color
+  attr_accessor :is_king, :position, :symbol
   alias_method :is_king?, :is_king
 
   def initialize(color, position, is_king=false)
@@ -44,59 +46,46 @@ class Piece
   end
 
   def slide_moves
-    [[@forward_direction + @position[0], @position[1] + 1],
-     [@forward_direction + @position[0], @position[1] - 1]]
+    [[(@forward_direction + @position[0]), (@position[1] + 1)],
+     [(@forward_direction + @position[0]), (@position[1] - 1)]]
   end
 
   def perform_slide(board, slide_move)
-    begin
-      raise InvalidMoveError unless board.valid_move?(slide_move) && slide_moves.include?(slide_move)
-    rescue InvalidMoveError => e
-      puts "#{e.message}"
-    else
-      board.get_move(self, slide_move)
-    end
+    raise InvalidMoveError unless board.valid_move?(slide_move) && slide_moves.include?(slide_move)
+    board.get_move(self, slide_move)
   end
 
   def jump_moves
-    [[@forward_direction * 2 + @position[0], @position[1] + 2],
-     [@forward_direction * 2 + @position[0], @position[1] - 2]]
+    [[(@forward_direction * 2 + @position[0]), (@position[1] + 2)],
+     [(@forward_direction * 2 + @position[0]), (@position[1] - 2)]]
   end
 
   def perform_jump(board, jump_move)
-    begin
-      attack_move = [(jump_move[0] + self.position[0]) / 2, (jump_move[1] + self.position[1]) / 2]
-      raise InvalidMoveError.new unless board.valid_jump_move?(self, jump_move, attack_move) && jump_moves.include?(jump_move)
-    rescue InvalidMoveError => e
-      puts "#{e.message}"
-    else
-      board.get_move(self, jump_move)
-      board.capture_piece(attack_move)
-    end
+    attack_move = [(jump_move[0] + self.position[0]) / 2, (jump_move[1] + self.position[1]) / 2]
+    raise InvalidMoveError unless board.valid_jump_move?(self, jump_move, attack_move) && jump_moves.include?(jump_move)
+
+    board.get_move(self, jump_move)
+    board.capture_piece(attack_move)
   end
 
   def perform_moves!(move_sequence, board)
     # should perform the moves one-by-one. If a move in the sequence fails, an InvalidMoveError should be raised.
     # should not bother to try to restore the original Board state if the move sequence fails.
-    move = move_sequence.first # if this is nil, will it crash the method when passed into valid_move?(move) ?
+    has_jumped = false
 
-    until move_sequence.empty?
-      move = move_sequence.shift
+    move_sequence.each do |move|
       attack_move = [(move[0] + self.position[0]) / 2, (move[1] + self.position[1]) / 2]
 
-      begin
-        raise InvalidMoveError.new unless (board.valid_jump_move?(self, move, attack_move) || board.valid_move?(move))
-      rescue InvalidMoveError => e
-        puts "#{e.message}"
+      raise InvalidMoveError unless (board.valid_jump_move?(self, move, attack_move) || board.valid_move?(move))
+
+      if board.valid_jump_move?(self, move, attack_move) && jump_moves.include?(move)
+        perform_jump(board, move) # after this step, you can only jump, not move
+        has_jumped = true
+      elsif board.valid_move?(move) && slide_moves.include?(move) && has_jumped == false
+        perform_slide(board, move)
         return
       else
-        if board.valid_jump_move?(self, move, attack_move) && jump_moves.include?(move)
-          perform_jump(board, move) # after this step, you can only jump, not move
-          has_jumped = true
-        elsif board.valid_move?(move) && slide_moves.include?(move) && has_jumped == false
-          perform_slide(board, move)
-          return  # breaks the loop
-        end
+        raise InvalidMoveError
       end
     end
   end
@@ -120,8 +109,20 @@ class Piece
       piece_copy.perform_moves!(move_sequence, board_copy)
     rescue InvalidMoveError
       return false
+    end
+    true
+  end
+
+  def promote_to_king
+    self.is_king = true
+    self.symbol = "\u265a"
+  end
+
+  def reached_other_side?
+    if self.color == :red
+      self.position[0] == 7
     else
-      true
+      self.position[0] == 0
     end
   end
 end
