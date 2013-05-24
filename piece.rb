@@ -83,7 +83,7 @@ class Piece
 
   def perform_moves!(move_sequence, board)
     has_jumped = false
-    move_sequence.each do |move|
+    move_sequence.each_with_index do |move, move_index|
       attack_move = [(move[0] + @position[0]) / 2, (move[1] + @position[1]) / 2]
 
       if jump_moves.include?(move) && board.valid_jump_move?(self, move, attack_move)
