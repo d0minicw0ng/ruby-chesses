@@ -22,6 +22,7 @@ class User
     puts "#{@color} player, please give me your desired move sequence. Please input the piece's coordinate in an array. (like c4,d3)"
     user_input = gets.chomp
     move_sequence = convert_move_sequence(user_input)
+
     raise InvalidMoveError unless piece.valid_move_seq?(move_sequence, board)
     move_sequence
   end

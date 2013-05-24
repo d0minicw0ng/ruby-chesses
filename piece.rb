@@ -56,12 +56,12 @@ class Piece
   end
 
   def jump_moves
-    [[(@forward_direction * 2 + @position[0]), (@position[1] + 2)],
-     [(@forward_direction * 2 + @position[0]), (@position[1] - 2)]]
+    [[(@position[0] + (@forward_direction * 2)), (@position[1] + 2)],
+     [(@position[0] + (@forward_direction * 2)), (@position[1] - 2)]]
   end
 
   def perform_jump(board, jump_move)
-    attack_move = [(jump_move[0] + self.position[0]) / 2, (jump_move[1] + self.position[1]) / 2]
+    attack_move = [(jump_move[0] + @position[0]) / 2, (jump_move[1] + @position[1]) / 2]
     raise InvalidMoveError unless board.valid_jump_move?(self, jump_move, attack_move) && jump_moves.include?(jump_move)
 
     board.get_move(self, jump_move)
@@ -72,13 +72,12 @@ class Piece
     # should perform the moves one-by-one. If a move in the sequence fails, an InvalidMoveError should be raised.
     # should not bother to try to restore the original Board state if the move sequence fails.
     has_jumped = false
-
+    debugger
     move_sequence.each do |move|
-      attack_move = [(move[0] + self.position[0]) / 2, (move[1] + self.position[1]) / 2]
-
-      raise InvalidMoveError unless (board.valid_jump_move?(self, move, attack_move) || board.valid_move?(move))
-
-      if board.valid_jump_move?(self, move, attack_move) && jump_moves.include?(move)
+      attack_move = [(move[0] + @position[0]) / 2, (move[1] + @position[1]) / 2]
+      # raise InvalidMoveError unless (board.valid_jump_move?(self, move, attack_move) || board.valid_move?(move))
+      # debugger
+      if jump_moves.include?(move) && board.valid_jump_move?(self, move, attack_move)
         perform_jump(board, move) # after this step, you can only jump, not move
         has_jumped = true
       elsif board.valid_move?(move) && slide_moves.include?(move) && has_jumped == false

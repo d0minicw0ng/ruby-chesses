@@ -24,7 +24,7 @@ class Board
   end
 
   def tile_at(move_pos)
-    raise "Invalid Position" unless tile_in_board?(move_pos)
+    raise "Not In Board" unless tile_in_board?(move_pos)
 
     x, y = move_pos
     @grid[x][y]
@@ -35,7 +35,7 @@ class Board
   end
 
   def valid_jump_move?(piece, jump_move, attack_move)
-    valid_move?(jump_move) && (!tile_at(attack_move).nil? && tile_at(attack_move).color != piece.color)
+    valid_move?(jump_move) && (tile_at(attack_move).is_a?(Piece) && tile_at(attack_move).color != piece.color)
   end
 
   def get_move(piece, move)
@@ -57,7 +57,7 @@ class Board
     board_copy = Board.new(false)
     board_copy.grid.each_with_index do |row, row_index|
       row.each_with_index do |piece, col_index|
-        piece = self.grid[row_index][col_index].dup unless self.grid[row_index][col_index].nil?
+        board_copy.grid[row_index][col_index] = self.grid[row_index][col_index].dup unless self.grid[row_index][col_index].nil?
       end
     end
     board_copy
